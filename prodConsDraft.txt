@@ -1,0 +1,88 @@
+#include <iostream>
+#include <pthread.h>
+#include <unistd.h>
+
+using namespace std;
+
+int bufferSize = 10; 
+int producedCount = 0; 
+int consumedCount = 0;
+bool pFinished = false;
+bool cFinished = false;
+pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+
+void *produce(void *arg) {
+    while(1) {
+        pthread_mutex_lock(&mutex);
+        //cout << "P: locked mutex" << endl;
+
+        if(producedCount < bufferSize) {
+            //producedCount++;
+            *((int*)arg) += 1;
+            cout << "P: produced " << producedCount << endl;
+            pthread_mutex_unlock(&mutex);
+            //cout << "P: unlocked mutex" << endl;
+        }
+        else {
+            pthread_mutex_unlock(&mutex);
+            //cout << "P: unlocked mutex" << endl;
+            pFinished = true;
+            return NULL;
+        }
+    }
+}
+
+void *consume(void *arg) {
+    while(1) {
+        pthread_mutex_lock(&mutex);
+        //cout << "C: locked mutex" << endl;
+
+        if(consumedCount < producedCount) {
+            //consumedCount++;
+            *((int*)arg) += 1;
+            cout << "C: consumed " << consumedCount << endl;
+            pthread_mutex_unlock(&mutex);
+            //cout << "C: unlocked mutex" << endl;
+        }
+        else {
+            pthread_mutex_unlock(&mutex);
+            //cout << "C: unlocked mutex" << endl;
+
+            if(consumedCount >= bufferSize) {
+                sleep(2);
+                cFinished = true;
+                return NULL;
+            }
+        }
+    }
+}
+
+int main() {
+
+    //int producer = 0;
+    //int consumer = 0;
+    pthread_t producerID, consumerID;
+
+    //pthread_create(&producerID, NULL, produce, &producer);
+    
+    //pthread_create(&consumerID, NULL, consume, &consumer);
+
+    pthread_create(&producerID, NULL, produce, &producedCount);
+    
+    pthread_create(&consumerID, NULL, consume, &consumedCount);
+
+    while(1) {
+        if(pFinished && cFinished) {
+            //pthread_join(producerID, NULL);
+            cout << "\nThe Producer produced: " << producedCount << " items" << endl;
+            sleep(2);
+
+            //pthread_join(consumerID, NULL);
+            cout << "\nThe Consumer consumed: " << consumedCount << " items" << endl;
+            sleep(2);
+            break;
+        }
+    }
+
+    return 0;
+}
