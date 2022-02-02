@@ -33,11 +33,16 @@ int main() {
     while(1) {
         cout << "\n> ";
 
-        cin >> input;
+        //cin >> input;
+        getline(cin, input);
+        cout << input << endl;
         size_t pos = 0;
         
+        int i = 0;
         while ((pos = input.find(delim)) != string::npos) {
             commands.push_back(input.substr(0,pos));
+            cout << commands[i] << endl;
+            i++;
             input.erase(0, pos + delim.length());
         }
         
