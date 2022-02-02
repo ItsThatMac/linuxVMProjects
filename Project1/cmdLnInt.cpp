@@ -5,6 +5,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -26,11 +27,25 @@ void sort(string file) {
 int main() {
 
     string input;
+    string delim = "; ";
+    vector<string> commands{};
 
     while(1) {
         cout << "\n> ";
 
         cin >> input;
+        size_t pos = 0;
+        
+        while ((pos = input.find(delim)) != string::npos) {
+            commands.push_back(input.substr(0,pos));
+            input.erase(0, pos + delim.length());
+        }
+        
+        for (const auto &w : commands) {
+            cout << w << endl;
+        }
+        
+        break;
 
         if(input == "x") break;  // exit program if user enters exit shell command
 
@@ -60,7 +75,7 @@ int main() {
         }
         */
 
+    
     }
-
     return 0;
 }
