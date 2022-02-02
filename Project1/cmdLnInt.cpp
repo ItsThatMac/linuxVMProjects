@@ -34,6 +34,10 @@ int main() {
 
         if(input == "x") break;  // exit program if user enters exit shell command
 
+        // insert string parsing stuff
+
+        
+
         // check to see if multiple commands were entered
         if(input.find_first_of(';') >= 0) {
             // chop into substring?? this might need to be recursive idk
