@@ -71,15 +71,10 @@ int main() {
             continue;  // prob not a good idea bc piping
         }
 
-        if(input == "mkdir")
-        /*
-        if(input begins with "sort") {
-            // process created to execute sort()
-            sort();
-            continue;
+        if(input == "mkdir") {
+            
         }
-        */
-
+     
     
     }
     return 0;
