@@ -38,43 +38,47 @@ int main() {
         cout << input << endl;
         size_t pos = 0;
         
-        int i = 0;
+        commands.clear();
         while ((pos = input.find(delim)) != string::npos) {
             commands.push_back(input.substr(0,pos));
-            cout << commands[i] << endl;
-            i++;
             input.erase(0, pos + delim.length());
         }
         
         for (const auto &w : commands) {
-            cout << w << endl;
+            //cout << w << endl;
         }
         
-        break;
+        //break;
 
-        if(input == "x") break;  // exit program if user enters exit shell command
-
-        // insert string parsing stuff
-
-        
-
-        // check to see if multiple commands were entered
-        if(input.find_first_of(';') >= 0) {
-            // chop into substring?? this might need to be recursive idk
-
-            // create array of input substrings??
+        // if no input was entered, display prompt again by returning to top of loop
+        if(commands.size() == 0) {
+            continue;
         }
 
-        if(input == "ls") {
-            // process will be created to execute ls()
-            ls();
-            continue;  // prob not a good idea bc piping
-        }
+        int i = 0;  // used for iteration through commands vector
 
-        if(input == "mkdir") {
-            
+        while(i < commands.size()) {
+
+            if(commands[i] == "quit") {
+                return 0;
+            }
+
+            if(commands[i] == "ls") {
+                ls();
+                i += 1;
+                continue;
+            }
+
+            if(commands[i] == "mkdir") {
+                int n = commands[i + 1].length();  // variable to hold length of directory name char array
+                char dirName[n + 1];  // declare char array
+                strcpy(dirName, commands[i + 1].c_str());  // copy string to char array
+
+                mkdir(dirName, 0777);  // make directory using name specified by user
+                i += 2;
+                continue;
+            }
         }
-     
     
     }
     return 0;
