@@ -11,11 +11,10 @@
 using namespace std;
 namespace fs = std::filesystem;
 
-
+// returns path of current directory as a string
 string pwd() {
-    // use filesystem library to get current path
-    fs::path p = fs::current_path();
-    return p.string();  // convert the variable from type path object, to string and return
+    fs::path p = fs::current_path();   // use filesystem library to get current path
+    return p.string();  // convert the variable from type path object to string and return
 }
 
 int main() {
@@ -25,27 +24,30 @@ int main() {
     vector<string> commands{};
 
     while(1) {
+
+        // display user input prompt
         cout << "\n> ";
 
-        getline(cin, input);
+        getline(cin, input);  // get entire input entered by user (including spaces) and store in string variable called input
         size_t pos = 0;
         
-        commands.clear();  // clear command array for new input
+        commands.clear();  // clear command vector for new input
         
         // check for ;
         if(input.find_first_of(';') != string::npos) {
+            // while a semicolon is present in the string
             while ((pos = input.find(delim)) != string::npos) {
-                commands.push_back(input.substr(0,pos));
-                input.erase(0, pos + delim.length());
+                commands.push_back(input.substr(0,pos));  // push a substring of input that is the string before the ; into the command vector
+                input.erase(0, pos + delim.length());  // delete substring from above line from input, and delete the delimiter as well
             }
-            commands.push_back(input);
+            commands.push_back(input);  // push remaining input string
         }
         // else check for space
         else if(input.find_first_of(' ') != string::npos) {
             // while a blank character exists in the string
             while((pos = input.find_first_of(' ')) != string::npos) {
-                commands.push_back(input.substr(0, pos));  // push a substring of input that is the string before the space into the command array
-                input.erase(0, pos + 1);  // delete previously pushed substring from input, and delete the space as well
+                commands.push_back(input.substr(0, pos));  // push a substring of input that is the string before the space into the command vector
+                input.erase(0, pos + 1);  // delete substring from above line from input, and delete the space as well
             }
             commands.push_back(input);  // push remaining input string
         }
@@ -54,49 +56,49 @@ int main() {
             commands.push_back(input);
         }
         
+        // print commands vector for debugging purposes
         for (const auto &w : commands) {
             //cout << w << endl;
-        }
-        
-        //break;
-
-        // if no input was entered, display prompt again by returning to top of loop
-        if(commands.size() == 0) {
-            continue;
         }
 
         int i = 0;  // used for iteration through commands vector
 
         while(i < commands.size()) {
 
+            // exit command line interpreter program
             if(commands[i] == "quit") {
                 return 0;
             }
 
+            // print path of current directory
             if(commands[i] == "pwd") {
                 cout << pwd() << endl;
                 i += 1;
                 continue;
             }
 
-
+            // display list of the current directory's contents
             if(commands[i] == "ls") {
-                system(commands[i].c_str());
+                system(commands[i].c_str());  // convert command from string to char array, then use system() to execute command
                 i += 1;
                 continue;
             }
 
+            // create a new emtpy directory within current directory, name of new directory is specified by user
             if(commands[i] == "mkdir") {
-                mkdir(commands[i + 1].c_str(), 0777);  // make directory using name specified by user
+                mkdir(commands[i + 1].c_str(), 0777);  // convert user's desired directory name to char array
                 i += 2;
                 continue;
             }
 
+            // remove an empty directory specified by user
             if(commands[i] == "rmdir") {
-                string dirName = pwd().append("/");
-                dirName.append(commands[i + 1]);
-                int status = rmdir(dirName.c_str());
-                if(status == 0) {
+                // construct path string of directory to delete by adding directory name to the end of the current path
+                string dirPath = pwd().append("/");
+                dirPath.append(commands[i + 1]);
+
+                // convert path from string to char array, if rmdir() returns 0, then removal was successful
+                if(rmdir(dirPath.c_str()) == 0) {
                     i += 2;
                     continue;
                 }
@@ -105,6 +107,12 @@ int main() {
                     i += 2;
                     continue;
                 }
+            }
+
+            // ignore any spaces before or after a command/prompt again if no input is entered
+            if(commands[i] == " " || "") {
+                i += 1;
+                continue;
             }
         }
     
