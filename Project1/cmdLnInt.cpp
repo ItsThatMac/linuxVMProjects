@@ -6,26 +6,18 @@
 #include <sys/types.h>
 #include <string>
 #include <vector>
-//#include <filesystem>
+#include <filesystem>
 
 using namespace std;
-//namespace fs = std::filesystem;
+namespace fs = std::filesystem;
 
-void ls() {
-    // using filesystem library
-    //for (auto const& dir_entry : fs::directory_iterator(".")) {cout << dir_entry << endl;}
 
-    // using Linux system() function
-    char command[50] = "ls";
-    system(command);
-}
-/*
 string pwd() {
     // use filesystem library to get current path
     fs::path p = fs::current_path();
     return p.string();  // convert the variable from type path object, to string and return
 }
-*/
+
 int main() {
 
     string input;
@@ -80,27 +72,38 @@ int main() {
                 return 0;
             }
 
-            /*if(commands[i] == "pwd") {
+            if(commands[i] == "pwd") {
                 cout << pwd() << endl;
                 i += 1;
                 continue;
-            }*/
+            }
 
 
             if(commands[i] == "ls") {
-                ls();
+                system(commands[i].c_str());
                 i += 1;
                 continue;
             }
 
             if(commands[i] == "mkdir") {
-                int n = commands[i + 1].length();  // variable to hold length of directory name char array
-                char dirName[n + 1];  // declare char array
-                strcpy(dirName, commands[i + 1].c_str());  // copy string to char array
-
-                mkdir(dirName, 0777);  // make directory using name specified by user
+                mkdir(commands[i + 1].c_str(), 0777);  // make directory using name specified by user
                 i += 2;
                 continue;
+            }
+
+            if(commands[i] == "rmdir") {
+                string dirName = pwd().append("/");
+                dirName.append(commands[i + 1]);
+                int status = rmdir(dirName.c_str());
+                if(status == 0) {
+                    i += 2;
+                    continue;
+                }
+                else {
+                    cout << "rmdir: failed to remove \'" << commands[i + 1] << "\'" << endl;
+                    i += 2;
+                    continue;
+                }
             }
         }
     
