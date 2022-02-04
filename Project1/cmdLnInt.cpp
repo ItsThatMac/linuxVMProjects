@@ -38,6 +38,7 @@ int main() {
                 commands.push_back(input.substr(0,pos));
                 input.erase(0, pos + delim.length());
             }
+            commands.push_back(input);
         }
         // else check for space
         else if(input.find_first_of(' ') != string::npos) {
