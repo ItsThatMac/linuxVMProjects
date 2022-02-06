@@ -1,12 +1,22 @@
+/***********************************************
+Project 1: UNIX/Linux Command Line Interpreter
+Ethan Macalaguim and Kayla Zantello
+CST-315: Operating Systems
+February 6, 2022
+
+Commands implemented:
+quit
+ls
+pwd
+mkdir
+rmdir
+***********************************************/
 #include <iostream>
-#include <unistd.h>
-#include <bits/stdc++.h>
-#include <iostream>
-#include <sys/stat.h>
-#include <sys/types.h>
 #include <string>
 #include <vector>
 #include <filesystem>
+#include <unistd.h>
+#include <sys/stat.h>
 
 using namespace std;
 namespace fs = std::filesystem;
