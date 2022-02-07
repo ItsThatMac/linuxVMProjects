@@ -30,7 +30,6 @@ string pwd() {
 int main() {
 
     string input;
-    string delim = "; ";
     vector<string> commands{};
 
     while(1) {
@@ -43,30 +42,14 @@ int main() {
         
         commands.clear();  // clear command vector for new input
         
-        // check for ;
-        if(input.find_first_of(';') != string::npos) {
-            // while a semicolon is present in the string
-            while ((pos = input.find(delim)) != string::npos) {
-                commands.push_back(input.substr(0,pos));  // push a substring of input that is the string before the ; into the command vector
-                input.erase(0, pos + delim.length());  // delete substring from above line from input, and delete the delimiter as well
-            }
-            commands.push_back(input);  // push remaining input string
+        // while a blank character exists in the string
+        while((pos = input.find_first_of(' ')) != string::npos) {
+            commands.push_back(input.substr(0, pos));  // push a substring of input that is the string before the space into the command vector
+            input.erase(0, pos + 1);  // delete substring from above line from input, and delete the space as well
         }
-        // else check for space
-        else if(input.find_first_of(' ') != string::npos) {
-            // while a blank character exists in the string
-            while((pos = input.find_first_of(' ')) != string::npos) {
-                commands.push_back(input.substr(0, pos));  // push a substring of input that is the string before the space into the command vector
-                input.erase(0, pos + 1);  // delete substring from above line from input, and delete the space as well
-            }
-            commands.push_back(input);  // push remaining input string
-        }
-        // else the command input was a single string
-        else {
-            commands.push_back(input);
-        }
+        commands.push_back(input);  // push remaining input string
         
-        // print commands vector for debugging purposes
+        // print commands vector (for debugging purposes)
         for (const auto &w : commands) {
             //cout << w << endl;
         }
@@ -113,7 +96,7 @@ int main() {
                     continue;
                 }
                 else {
-                    cout << "rmdir: failed to remove \'" << commands[i + 1] << "\'" << endl;
+                    cout << "rmdir: failed to remove \'" << commands[i + 1] << "\'" << endl;  // notify user if unsuccessful
                     i += 2;
                     continue;
                 }
