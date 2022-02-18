@@ -30,83 +30,116 @@ string pwd() {
 int main() {
 
     string input;
-    vector<string> commands{};
+    vector<vector<string>> commands{};
 
     while(1) {
-
+        
         // display user input prompt
         cout << "\n> ";
 
-        getline(cin, input);  // get entire input entered by user (including spaces) and store in string variable called input
-        size_t pos = 0;
-        
         commands.clear();  // clear command vector for new input
+
+        getline(cin, input);  // get entire input entered by user (including spaces) and store in string variable called input
+        size_t pos1, pos2, pos3 = 0;
         
-        // while a blank character exists in the string
-        while((pos = input.find_first_of(' ')) != string::npos) {
-            commands.push_back(input.substr(0, pos));  // push a substring of input that is the string before the space into the command vector
-            input.erase(0, pos + 1);  // delete substring from above line from input, and delete the space as well
+        vector<string> temp{};
+        while((pos1 = input.find("; ")) != string::npos) {
+            temp.push_back(input.substr(0, pos1));
+            input.erase(0, pos1 + 2); 
         }
-        commands.push_back(input);  // push remaining input string
-        
+        temp.push_back(input);
+
+        vector<string> cmd{};
+        for(int i = 0; i < temp.size(); i++) {
+            cmd.clear();
+            while((pos2 = temp[i].find_first_of(' ')) != string::npos) {
+                cmd.push_back(temp[i].substr(0, pos2));
+                temp[i].erase(0, pos2 + 1);
+            }
+            cmd.push_back(temp[i]);
+            commands.push_back(cmd);
+        }
+
+        cout << "size of commands vector: " << commands.size() << endl;
+/*
+        vector<string>::iterator it;
+        for(int i = 0; i < commands.size(); i++) {
+            //cout << "commands[" << i << "] (" << commands[i].size() << ") = ";
+            for(int j = 0; j < commands[i].size(); j++) {
+                //cout << "|" << commands[i][j] << "|" << " (" << commands[i][j].size() << ")" << " ";
+                if(commands[i][j].size() == 0) {
+                    it = commands[i].begin() + j;
+                    commands[i].erase(it);
+                }
+            }
+            //cout << endl;
+        }
+*/     
         // print commands vector (for debugging purposes)
-        for (const auto &w : commands) {
-            //cout << w << endl;
+        for(int i = 0; i < commands.size(); i++) {
+            cout << "commands[" << i << "] (" << commands[i].size() << ") = ";
+            for(int j = 0; j < commands[i].size(); j++) {
+                cout << "|" << commands[i][j] << "|" << " (" << commands[i][j].size() << ")" << " ";
+            }
+            cout << endl;
         }
+        
+        //break;
 
-        int i = 0;  // used for iteration through commands vector
-
-        while(i < commands.size()) {
+        //int i = 0;  // used for iteration through commands vector
+        
+        
+        for(int i = 0; i < commands.size(); i++) {
 
             // exit command line interpreter program
-            if(commands[i] == "quit") {
+            if(commands[i][0] == "quit") {
                 return 0;
             }
 
             // print path of current directory
-            if(commands[i] == "pwd") {
+            if(commands[i][0] == "pwd") {
                 cout << pwd() << endl;
-                i += 1;
+                //i += 1;
                 continue;
             }
 
             // display list of the current directory's contents
-            if(commands[i] == "ls") {
-                system(commands[i].c_str());  // convert command from string to char array, then use system() to execute command
-                i += 1;
+            if(commands[i][0] == "ls") {
+                system(commands[i][0].c_str());  // convert command from string to char array, then use system() to execute command
+                //i += 1;
                 continue;
             }
 
             // create a new emtpy directory within current directory, name of new directory is specified by user
-            if(commands[i] == "mkdir") {
-                mkdir(commands[i + 1].c_str(), 0777);  // convert user's desired directory name to char array
-                i += 2;
+            if(commands[i][0] == "mkdir") {
+                mkdir(commands[i][1].c_str(), 0777);  // convert user's desired directory name to char array
+                //i += 2;
                 continue;
             }
 
             // remove an empty directory specified by user
-            if(commands[i] == "rmdir") {
+            if(commands[i][0] == "rmdir") {
                 // construct path string of directory to delete by adding directory name to the end of the current path
                 string dirPath = pwd().append("/");
-                dirPath.append(commands[i + 1]);
+                dirPath.append(commands[i][1]);
 
                 // convert path from string to char array, if rmdir() returns 0, then removal was successful
                 if(rmdir(dirPath.c_str()) == 0) {
-                    i += 2;
+                    //i += 2;
                     continue;
                 }
                 else {
-                    cout << "rmdir: failed to remove \'" << commands[i + 1] << "\'" << endl;  // notify user if unsuccessful
-                    i += 2;
+                    cout << "rmdir: failed to remove \'" << commands[i][1] << "\'" << endl;  // notify user if unsuccessful
+                    //i += 2;
                     continue;
                 }
             }
 
             // ignore any spaces before or after a command/prompt again if no input is entered
-            if(commands[i] == " " || "") {
-                i += 1;
-                continue;
-            }
+            //if(commands[i][j] == " " || "") {
+                //i += 1;
+                //continue;
+            //}
         }
     
     }
