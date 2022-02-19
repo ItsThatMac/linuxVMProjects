@@ -16,20 +16,9 @@
 6. df: display how much space is available on your system
 7. free: display how much RAM is available on your system
 
-### How to input
-Here are a few examples on how to input commands that require additional input
-- mkdir - takes in a name for the new directory
-```
-mkdir newdir
-```
-This will create a new directory named 'newdir'
-- rmdir - takes in the name of the directory to be removed
-```
-rmdir thisdir
-```
-This will remove the directory named 'thisdir' NOTE: directory must be located in current working directory and be empty
-- Multiple commands - this command line interpreter allows the user to run multiple commands in a single line by placing a ';' between commands
+### Running multiple commands
+This command line interpreter allows the user to run multiple commands in a single line by placing a ';' between commands.
 ```
 pwd; mkdir mydir; ls
 ```
-This will run the 'pwd', 'mydir', and 'ls' commands. Commands will be run in the order they were entered.
+This will run the 'pwd', 'mkdir', and 'ls' commands. Commands will be run in the order they were entered.
