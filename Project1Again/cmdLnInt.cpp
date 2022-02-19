@@ -1,8 +1,8 @@
-/***********************************************
-Project 1: UNIX/Linux Command Line Interpreter
+/*********************************************************
+Project 1: Improved UNIX/Linux Command Line Interpreter
 Ethan Macalaguim and Kayla Zantello
 CST-315: Operating Systems
-February 6, 2022
+February 20, 2022
 
 Commands implemented:
 quit
@@ -10,7 +10,11 @@ ls
 pwd
 mkdir
 rmdir
-***********************************************/
+df
+free
+
+Execute multiple commands by entering a ; between commands
+************************************************************/
 #include <iostream>
 #include <string>
 #include <vector>
@@ -40,41 +44,32 @@ int main() {
         commands.clear();  // clear command vector for new input
 
         getline(cin, input);  // get entire input entered by user (including spaces) and store in string variable called input
-        size_t pos1, pos2, pos3 = 0;
+        size_t pos = 0;
         
         vector<string> temp{};
-        while((pos1 = input.find("; ")) != string::npos) {
-            temp.push_back(input.substr(0, pos1));
-            input.erase(0, pos1 + 2); 
+        while((pos = input.find_first_of(';')) != string::npos) {
+            temp.push_back(input.substr(0, pos));
+            input.erase(0, pos + 1); 
         }
         temp.push_back(input);
 
         vector<string> cmd{};
         for(int i = 0; i < temp.size(); i++) {
             cmd.clear();
-            while((pos2 = temp[i].find_first_of(' ')) != string::npos) {
-                cmd.push_back(temp[i].substr(0, pos2));
-                temp[i].erase(0, pos2 + 1);
+            while((pos = temp[i].find_first_of(' ')) != string::npos) {
+                if(temp[i].substr(0, pos).size() == 0) { 
+                    temp[i].erase(0, pos + 1);
+                    continue; 
+                }
+                cmd.push_back(temp[i].substr(0, pos));
+                temp[i].erase(0, pos + 1);
             }
             cmd.push_back(temp[i]);
             commands.push_back(cmd);
         }
 
         cout << "size of commands vector: " << commands.size() << endl;
-/*
-        vector<string>::iterator it;
-        for(int i = 0; i < commands.size(); i++) {
-            //cout << "commands[" << i << "] (" << commands[i].size() << ") = ";
-            for(int j = 0; j < commands[i].size(); j++) {
-                //cout << "|" << commands[i][j] << "|" << " (" << commands[i][j].size() << ")" << " ";
-                if(commands[i][j].size() == 0) {
-                    it = commands[i].begin() + j;
-                    commands[i].erase(it);
-                }
-            }
-            //cout << endl;
-        }
-*/     
+
         // print commands vector (for debugging purposes)
         for(int i = 0; i < commands.size(); i++) {
             cout << "commands[" << i << "] (" << commands[i].size() << ") = ";
@@ -87,7 +82,6 @@ int main() {
         //break;
 
         //int i = 0;  // used for iteration through commands vector
-        
         
         for(int i = 0; i < commands.size(); i++) {
 
@@ -133,6 +127,16 @@ int main() {
                     //i += 2;
                     continue;
                 }
+            }
+
+            if(commands[i][0] == "df") {
+                system(commands[i][0].c_str());
+                continue;
+            }
+
+            if(commands[i][0] == "free") {
+                system(commands[i][0].c_str());
+                continue;
             }
 
             // ignore any spaces before or after a command/prompt again if no input is entered
