@@ -67,6 +67,10 @@ int main() {
                 cmd.push_back(temp[i].substr(0, pos));
                 temp[i].erase(0, pos + 1);
             }
+            if(temp[i].size() == 0) {
+                commands.push_back(cmd);
+                continue;
+            }
             cmd.push_back(temp[i]);
             commands.push_back(cmd);
         }
