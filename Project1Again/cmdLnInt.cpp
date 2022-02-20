@@ -146,7 +146,7 @@ int main() {
                 continue;
             }
 
-            // concatenate and print files
+            // write to or print a single file
             if(commands[i][0] == "cat") {
                 if(commands[i][1] == ">") {
                     string newCommand = commands[i][0] + " > " + commands[i][2];
