@@ -16,7 +16,7 @@
 6. df: display how much space is available on your system
 7. free: display how much RAM is available on your system
 8. date: print current date
-9. cat: concatenate files and print result
+9. cat: write to or print a single file
 10. cd: change current working directory
 
 ### Running multiple commands
@@ -24,4 +24,4 @@ This command line interpreter allows the user to run multiple commands in a sing
 ```
 pwd; mkdir mydir; ls
 ```
-This will run the 'pwd', 'mkdir', and 'ls' commands. Commands will be run in the order they were entered.
+This will run the 'pwd', 'mkdir', and 'ls' commands. Commands will be run in the order they were entered. Spaces before or after the semicolon do not affect output.
