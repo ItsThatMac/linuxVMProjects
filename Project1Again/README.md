@@ -15,6 +15,9 @@
 5. rmdir: remove an empty directory within current directory
 6. df: display how much space is available on your system
 7. free: display how much RAM is available on your system
+8. date: print current date
+9. cat: concatenate files and print result
+10. cd: change current working directory
 
 ### Running multiple commands
 This command line interpreter allows the user to run multiple commands in a single line by placing a ';' between commands.
