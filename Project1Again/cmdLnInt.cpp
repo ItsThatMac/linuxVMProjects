@@ -12,6 +12,9 @@ mkdir
 rmdir
 df
 free
+date
+cat
+cd
 
 Execute multiple commands by entering a ; between commands
 ************************************************************/
@@ -104,6 +107,12 @@ int main() {
                 continue;
             }
 
+            if(commands[i][0] == "date") {
+                system(commands[i][0].c_str());
+                //i += 1;
+                continue;
+            }
+
             // create a new emtpy directory within current directory, name of new directory is specified by user
             if(commands[i][0] == "mkdir") {
                 mkdir(commands[i][1].c_str(), 0777);  // convert user's desired directory name to char array
@@ -125,6 +134,27 @@ int main() {
                 else {
                     cout << "rmdir: failed to remove \'" << commands[i][1] << "\'" << endl;  // notify user if unsuccessful
                     //i += 2;
+                    continue;
+                }
+            }
+
+            if(commands[i][0] == "cd") {
+                chdir(commands[i][1].c_str());
+                // i+=2;
+                continue;
+            }
+
+            if(commands[i][0] == "cat") {
+                if(commands[i][1] == ">") {
+                    string newCommand = commands[i][0] + " > " + commands[i][2];
+                    system(newCommand.c_str());
+                    // i+=3;
+                    continue;
+                }
+                else {
+                    string newCommand2 = commands[i][0] + " " + commands[i][1];
+                    system(newCommand2.c_str());
+                    // i+=2;
                     continue;
                 }
             }
